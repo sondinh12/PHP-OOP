@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<?php echo $this->runChild('component.header'); ?>
+<body>
+ <div id="wrapper">
+ <?php echo $this->runChild('component.side-bar'); ?>
+ <div id="page-wrapper" class="gray-bg">
+ <?php echo $this->runChild('component.profile-head'); ?>
+ <div class="row wrapper border-bottom white-bg page-heading">
+ <div class="col-lg-10">
+ <h2>Danh sách danh mục</h2>
+ <ol class="breadcrumb">
+ <li>
+ <a href="index.html">Category</a>
+ </li>
+ <li class="active">
+ <strong>Danh mục</strong>
+ </li>
+ </ol>
+ </div>               
+ </div>  
+ <?php 
+ if(isset($_SESSION['message'])){
+ echo $_SESSION['message'];
+ unset($_SESSION['message']);
+ }
+ ?>
+
+ <?php /* form tìm kiếm */ ?>
+ <form action="<?= $_ENV['BASE_URL'] . 'admin/category' ?>" method="GET" class="mb-4 d-flex">
+ <input type="text" name="cate_name" value="<?php echo \htmlentities($keyword??'', ENT_QUOTES, 'UTF-8', false); ?>" class="form-control me-2" placeholder="Nhập tên danh mục...">
+ <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+ </form>
+ <div class="table-responsive">
+ <p>
+ <a href="<?=$_ENV['BASE_URL'] . 'admin/category/add'?> "><button class="btn btn-primary">Thêm</button></a>
+ </p>
+ <table class="table table-striped table-hover">
+ <thead class="table-dark">
+ <tr>
+ <th>ID</th>
+ <th>Tên danh mục</th>
+ <th>Ngày tạo</th>
+ <th>Ngày cập nhật</th>
+ <th>Hành động</th>
+ </tr>
+ </thead>
+ <tbody>
+ <?php if(!empty($cate) && count($cate) > 0): ?>
+ <?php $__currentLoopData = $cate; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $key): $loop = $this->incrementLoopIndices();  ?>
+ <tr>
+ <td><?php echo \htmlentities($key['cate_id']??'', ENT_QUOTES, 'UTF-8', false); ?></td>
+ <td><?php echo \htmlentities($key['cate_name']??'', ENT_QUOTES, 'UTF-8', false); ?></td>
+ <td><?php echo \htmlentities($key['create_at']??'', ENT_QUOTES, 'UTF-8', false); ?></td>
+ <td><?php echo \htmlentities($key['update_at']??'', ENT_QUOTES, 'UTF-8', false); ?></td>
+ <td>
+ <a href="<?php echo \htmlentities($_ENV['BASE_URL'] . 'admin/category/update/' . $key['cate_id']??'', ENT_QUOTES, 'UTF-8', false); ?>" class="btn btn-warning btn-sm">Sửa</a>
+ <a href="<?php echo \htmlentities($_ENV['BASE_URL'] . 'admin/category/delete/' . $key['cate_id']??'', ENT_QUOTES, 'UTF-8', false); ?>" 
+ onclick="return confirm('Bạn có chắc chắn muốn xóa không?')" 
+ class="btn btn-danger btn-sm">Xóa</a>
+ </td>
+ </tr>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ <?php else: ?>
+ <tr>
+ <td colspan="9" class="text-center text-danger">Không tìm thấy sản phẩm nào.</td>
+ </tr>
+ <?php endif; ?>
+
+ </tbody>
+ </table>
+ </div>
+ <?php echo $this->runChild('component.footer'); ?>
+ </div>
+ </div>
+ 
+
+ <?php echo $this->runChild('component.script'); ?>;
+
+</body>
+</html>
